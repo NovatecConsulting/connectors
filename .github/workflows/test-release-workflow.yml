@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-push:
-    name: Build and push Docker images
+    name: TEST Build and push Docker images
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,8 +38,8 @@ jobs:
           releaseBranch=$( git branch --contains ${RELEASE_VERSION} --format='%(refname:short)' )
           git checkout "$releaseBranch"
           echo "releaseBranch=$releaseBranch" >> $GITHUB_OUTPUT
-        env:
-          RELEASE_VERSION: ${{ steps.set_version.outputs.tagVersion }}
+#        env:
+#          RELEASE_VERSION: ${{ steps.set_version.outputs.tagVersion }}
 
       - name: Build Changelog
         id: changelog
