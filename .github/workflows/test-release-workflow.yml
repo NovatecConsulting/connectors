@@ -29,7 +29,6 @@ jobs:
           echo "type=$( echo $OUTPUT | cut -d ' ' -f1 )" >> $GITHUB_OUTPUT
           echo "previousTag=$( echo $OUTPUT | cut -d ' ' -f2 )" >> $GITHUB_OUTPUT
 
-      # We will update this branch by setting the new version and pushing it
       - name: Determine release branch name
         id: determine_release_branch
         run: |
