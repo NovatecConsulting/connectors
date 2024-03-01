@@ -1,5 +1,4 @@
-name: TEST release only build changelog
-
+name: TEST release workflow; build changelog
 
 on:
   push:
@@ -18,7 +17,6 @@ jobs:
         id: set_version
         run: |
           echo "tagVersion=8.3.8-rc1" >> $GITHUB_OUTPUT
-          
 
       - name: Validate release tag and determine previous tag
         id: validate_tag
@@ -36,7 +34,7 @@ jobs:
         id: determine_release_branch
         run: |
           releaseBranch=$( git branch --contains ${RELEASE_VERSION} --format='%(refname:short)' )
-          git checkout "$releaseBranch"
+#          git checkout "$releaseBranch"
           echo "releaseBranch=$releaseBranch" >> $GITHUB_OUTPUT
 #        env:
 #          RELEASE_VERSION: ${{ steps.set_version.outputs.tagVersion }}
