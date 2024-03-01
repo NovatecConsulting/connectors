@@ -40,5 +40,3 @@ jobs:
           writeToFile: false
           excludeTypes: build,docs,other,style,ci
           excludeScopes: deps
-        run: |
-          echo "Building changelog from ${{ steps.set_version.outputs.tagVersion }} to ${{ steps.validate_tag.outputs.previousTag }}"
