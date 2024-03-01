@@ -5,8 +5,8 @@ on:
   push:
 
 jobs:
-  build-and-log:
-    name: Build and Generate Logs
+  build-and-push:
+    name: Build and push Docker images
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,41 +14,13 @@ jobs:
           ref: ${{ github.event.release.target_commitish }}
           fetch-depth: 0
 
-      - name: Setup release tag name
-        run: echo "RELEASE_TAG_NAME=8.3.8-rc1" >> $GITHUB_ENV
-
       - name: Validate release tag and determine previous tag
         id: validate_tag
         run: |
-          OUTPUT="$(.github/workflows/scripts/prev_tag.sh $RELEASE_TAG_NAME)"
+          OUTPUT="$(.github/workflows/scripts/prev_tag.sh '8.3.8-rc1')"
           if [ $? -ne 0 ]; then
             echo "Script failed"
             exit 1
           fi
           echo "type=$( echo $OUTPUT | cut -d ' ' -f1 )" >> $GITHUB_OUTPUT
           echo "previousTag=$( echo $OUTPUT | cut -d ' ' -f2 )" >> $GITHUB_OUTPUT
-
-      - name: Determine release branch name
-        id: determine_release_branch
-        run: |
-          releaseBranch=$( git branch --contains ${RELEASE_VERSION} --format='%(refname:short)' )
-          git checkout "$releaseBranch"
-          echo "releaseBranch=$releaseBranch" >> $GITHUB_OUTPUT
-        env:
-          RELEASE_VERSION: $RELEASE_TAG_NAME
-
-      - name: Build Changelog
-        id: changelog
-        uses: Requarks/changelog-action@v1
-        with:
-          token: ${{ github.token }}
-          fromTag: $RELEASE_TAG_NAME
-          toTag: ${{ steps.validate_tag.outputs.previousTag }}
-          writeToFile: false
-          excludeTypes: build,docs,other,style,ci
-          excludeScopes: deps
-
-      - name: Use input version
-        run: |
-          echo "Using version ${{ github.event.inputs.version }}"
-          # You can use the version input in your commands as needed
