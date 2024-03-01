@@ -1,4 +1,4 @@
-name: TEST release; only build changelog
+name: TEST release only build changelog
 on:
   workflow_dispatch:
     inputs:
