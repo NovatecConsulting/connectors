@@ -20,7 +20,6 @@ jobs:
           echo "tagVersion=8.3.8-rc1" >> $GITHUB_OUTPUT
           
 
-
       - name: Validate release tag and determine previous tag
         id: validate_tag
         run: |
