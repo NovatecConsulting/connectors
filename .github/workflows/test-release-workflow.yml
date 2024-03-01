@@ -18,16 +18,8 @@ jobs:
         id: set_version
         run: |
           echo "tagVersion=8.3.8-rc1" >> $GITHUB_OUTPUT
+          
 
-      # We will update this branch by setting the new version and pushing it
-      - name: Determine release branch name
-        id: determine_release_branch
-        run: |
-          releaseBranch=$( git branch --contains ${RELEASE_VERSION} --format='%(refname:short)' )
-          git checkout "$releaseBranch"
-          echo "releaseBranch=$releaseBranch" >> $GITHUB_OUTPUT
-        env:
-          RELEASE_VERSION: ${{ steps.set_version.outputs.tagVersion }}
 
       - name: Validate release tag and determine previous tag
         id: validate_tag
@@ -39,6 +31,16 @@ jobs:
           fi
           echo "type=$( echo $OUTPUT | cut -d ' ' -f1 )" >> $GITHUB_OUTPUT
           echo "previousTag=$( echo $OUTPUT | cut -d ' ' -f2 )" >> $GITHUB_OUTPUT
+
+      # We will update this branch by setting the new version and pushing it
+      - name: Determine release branch name
+        id: determine_release_branch
+        run: |
+          releaseBranch=$( git branch --contains ${RELEASE_VERSION} --format='%(refname:short)' )
+          git checkout "$releaseBranch"
+          echo "releaseBranch=$releaseBranch" >> $GITHUB_OUTPUT
+        env:
+          RELEASE_VERSION: ${{ steps.set_version.outputs.tagVersion }}
 
       - name: Build Changelog
         id: changelog
