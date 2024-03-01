@@ -14,13 +14,31 @@ jobs:
           ref: ${{ github.event.release.target_commitish }}
           fetch-depth: 0
 
+      - name: set tag version
+        id: set_version
+        run: |
+          echo "tagVersion=8.3.8-rc1" >> $GITHUB_OUTPUT
+
       - name: Validate release tag and determine previous tag
         id: validate_tag
         run: |
-          OUTPUT="$(.github/workflows/scripts/prev_tag.sh '8.3.8-rc1')"
+          OUTPUT="$(.github/workflows/scripts/prev_tag.sh ${{ steps.set_version.outputs.tagVersion }})"
           if [ $? -ne 0 ]; then
             echo "Script failed"
             exit 1
           fi
           echo "type=$( echo $OUTPUT | cut -d ' ' -f1 )" >> $GITHUB_OUTPUT
           echo "previousTag=$( echo $OUTPUT | cut -d ' ' -f2 )" >> $GITHUB_OUTPUT
+
+      - name: Build Changelog
+        id: changelog
+        uses: Requarks/changelog-action@v1
+        with:
+          token: ${{ github.token }}
+          fromTag: ${{ steps.set_version.outputs.tagVersion }}
+          toTag: ${{ steps.validate_tag.outputs.previousTag }}
+          writeToFile: false
+          excludeTypes: build,docs,other,style,ci
+          excludeScopes: deps
+        run: |
+          echo "Building changelog from ${{ steps.set_version.outputs.tagVersion }} to ${{ steps.validate_tag.outputs.previousTag }}"
