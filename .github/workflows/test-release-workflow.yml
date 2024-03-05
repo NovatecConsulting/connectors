@@ -37,7 +37,7 @@ jobs:
           echo "releaseBranch=$releaseBranch" >> $GITHUB_OUTPUT
         env:
           RELEASE_VERSION: ${{ steps.set_version.outputs.tagVersion }}
-
+#
 
       - name: Build Changelog
         id: changelog
