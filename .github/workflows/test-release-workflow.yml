@@ -33,7 +33,7 @@ jobs:
         id: determine_release_branch
         run: |
           releaseBranch=$( git branch --contains ${RELEASE_VERSION} --format='%(refname:short)' )
-          git checkout "$releaseBranch"
+#          git checkout "$releaseBranch"
           echo "releaseBranch=$releaseBranch" >> $GITHUB_OUTPUT
         env:
           RELEASE_VERSION: ${{ steps.set_version.outputs.tagVersion }}
