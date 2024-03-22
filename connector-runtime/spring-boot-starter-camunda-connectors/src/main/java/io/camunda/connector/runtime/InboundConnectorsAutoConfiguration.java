@@ -16,6 +16,7 @@
  */
 package io.camunda.connector.runtime;
 
+import io.camunda.common.auth.Authentication;
 import io.camunda.connector.runtime.inbound.InboundConnectorRuntimeConfiguration;
 import io.camunda.operate.CamundaOperateClient;
 import io.camunda.zeebe.spring.client.CamundaAutoConfiguration;
@@ -44,14 +45,14 @@ public class InboundConnectorsAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  public CamundaOperateClient myOperateClient(
-      OperateClientConfiguration configuration, OperateClientConfigurationProperties properties) {
-    return configuration.camundaOperateClient(properties);
+  public CamundaOperateClient myOperateClient(OperateClientConfiguration configuration) {
+    return configuration.camundaOperateClient();
   }
 
   @Bean
   @ConditionalOnMissingBean
-  public OperateClientConfiguration operateClientProdAutoConfiguration() {
-    return new OperateClientConfiguration();
+  public OperateClientConfiguration operateClientProdAutoConfiguration(
+      OperateClientConfigurationProperties properties, Authentication authentication) {
+    return new OperateClientConfiguration(properties, null, authentication);
   }
 }
