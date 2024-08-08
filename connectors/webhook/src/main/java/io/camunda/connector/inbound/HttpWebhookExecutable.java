@@ -45,7 +45,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +143,6 @@ public class HttpWebhookExecutable implements WebhookConnectorExecutable {
         payload.params());
   }
 
-  @Nullable
   private Function<WebhookResultContext, WebhookHttpResponse> mapResponseExpression() {
     Function<WebhookResultContext, WebhookHttpResponse> responseExpression = null;
     if (props.responseExpression() != null) {
