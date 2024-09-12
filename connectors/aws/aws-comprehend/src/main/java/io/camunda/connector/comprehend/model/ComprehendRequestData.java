@@ -80,5 +80,133 @@ public record ComprehendRequestData(
             defaultValue = "true")
         @NotNull
         boolean featureTypeForms,
-    @TemplateProperty(group = "input", label = "Endpoint ARN", description = "TODO") @NotNull
-        String endpointArn) {}
+    @TemplateProperty(
+            label = "Input S3 URI",
+            group = "input",
+            description = "The Amazon S3 URI for the input data",
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        @NotNull
+        String inputS3Uri,
+    @TemplateProperty(
+            label = "Input Format",
+            group = "input",
+            type = TemplateProperty.PropertyType.Dropdown,
+            feel = FeelMode.disabled,
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"),
+            choices = {
+              @TemplateProperty.DropdownPropertyChoice(
+                  value = "ONE_DOC_PER_FILE",
+                  label = "Each file is considered a separate document"),
+              @TemplateProperty.DropdownPropertyChoice(
+                  value = "ONE_DOC_PER_LINE",
+                  label = "Each line in a file is considered a separate document")
+            },
+            description = "Specifies how the text in an input file should be processed")
+        ComprehendInputFormat comprehendInputFormat,
+    @TemplateProperty(
+            group = "input",
+            label = "Endpoint ARN",
+            description = "The Amazon Resource Number (ARN) of the endpoint")
+        @NotNull
+        String endpointArn,
+    @TemplateProperty(
+            group = "input",
+            label = "Client request token",
+            description = "A unique identifier for the request",
+            optional = true,
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        String clientRequestToken,
+    @TemplateProperty(
+            group = "input",
+            label = "Data Access Role ARN",
+            description =
+                "The ARN of the IAM role that grants Amazon Comprehend read access to your input data",
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        @NotNull
+        String dataAccessRoleArn,
+    @TemplateProperty(
+            group = "input",
+            label = "Document Classifier ARN",
+            description = "The ARN of the document classifier to use to process the job",
+            optional = true,
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        String documentClassifierArn,
+    @TemplateProperty(
+            group = "input",
+            label = "Flywheel ARN",
+            description = "The ARN of the flywheel associated with the model",
+            optional = true,
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        String flywheelArn,
+    @TemplateProperty(
+            group = "input",
+            label = "Job name",
+            description = "The identifier of the job",
+            optional = true,
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        String jobName,
+    @TemplateProperty(
+            group = "input",
+            label = "Output S3 URI",
+            description = "S3 location where the date will be written",
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        @NotNull
+        String outputS3Uri,
+    @TemplateProperty(
+            group = "input",
+            label = "Output Kms Key Id",
+            description = "KMS key id used for encrypt the output result",
+            optional = true,
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        String outputKmsKeyId,
+    @TemplateProperty(
+            group = "input",
+            label = "Tags",
+            description =
+                "Tag consist of key and value.\n Use <:> as a separator between key "
+                    + "and value, and < , > as a separator between tags.",
+            optional = true,
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        String tags,
+    @TemplateProperty(
+            group = "input",
+            label = "Volume Kms Key Id",
+            description =
+                "KMS that Amazon Comprehend uses to encrypt data on the storage volume \n"
+                    + " attached to the ML compute instance",
+            optional = true,
+            condition =
+                @TemplateProperty.PropertyCondition(
+                    property = "input.executionType",
+                    equals = "ASYNC"))
+        String volumeKmsKeyId) {}

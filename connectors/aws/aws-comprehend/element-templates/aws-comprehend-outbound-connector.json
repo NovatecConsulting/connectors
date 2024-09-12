@@ -235,9 +235,52 @@
     },
     "type" : "Boolean"
   }, {
+    "id" : "input.inputS3Uri",
+    "label" : "Input S3 URI",
+    "description" : "The Amazon S3 URI for the input data",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.inputS3Uri",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.comprehendInputFormat",
+    "label" : "Input Format",
+    "description" : "Specifies how the text in an input file should be processed",
+    "optional" : false,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.comprehendInputFormat",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "Each file is considered a separate document",
+      "value" : "ONE_DOC_PER_FILE"
+    }, {
+      "name" : "Each line in a file is considered a separate document",
+      "value" : "ONE_DOC_PER_LINE"
+    } ]
+  }, {
     "id" : "input.endpointArn",
     "label" : "Endpoint ARN",
-    "description" : "TODO",
+    "description" : "The Amazon Resource Number (ARN) of the endpoint",
     "optional" : false,
     "constraints" : {
       "notEmpty" : true
@@ -247,6 +290,165 @@
     "binding" : {
       "name" : "input.endpointArn",
       "type" : "zeebe:input"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.clientRequestToken",
+    "label" : "Client request token",
+    "description" : "A unique identifier for the request",
+    "optional" : true,
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.clientRequestToken",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.dataAccessRoleArn",
+    "label" : "Data Access Role ARN",
+    "description" : "The ARN of the IAM role that grants Amazon Comprehend read access to your input data",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.dataAccessRoleArn",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.documentClassifierArn",
+    "label" : "Document Classifier ARN",
+    "description" : "The ARN of the document classifier to use to process the job",
+    "optional" : true,
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.documentClassifierArn",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.flywheelArn",
+    "label" : "Flywheel ARN",
+    "description" : "The ARN of the flywheel associated with the model",
+    "optional" : true,
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.flywheelArn",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.jobName",
+    "label" : "Job name",
+    "description" : "The identifier of the job",
+    "optional" : true,
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.jobName",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.outputS3Uri",
+    "label" : "Output S3 URI",
+    "description" : "S3 location where the date will be written",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.outputS3Uri",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.outputKmsKeyId",
+    "label" : "Output Kms Key Id",
+    "description" : "KMS key id used for encrypt the output result",
+    "optional" : true,
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.outputKmsKeyId",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.tags",
+    "label" : "Tags",
+    "description" : "Tag consist of key and value.\n Use <:> as a separator between key and value, and < , > as a separator between tags.",
+    "optional" : true,
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.tags",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.volumeKmsKeyId",
+    "label" : "Volume Kms Key Id",
+    "description" : "KMS that Amazon Comprehend uses to encrypt data on the storage volume \n attached to the ML compute instance",
+    "optional" : true,
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.volumeKmsKeyId",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "input.executionType",
+      "equals" : "ASYNC",
+      "type" : "simple"
     },
     "type" : "String"
   }, {

@@ -6,10 +6,14 @@
  */
 package io.camunda.connector.comprehend;
 
+import com.amazonaws.services.comprehend.model.*;
 import io.camunda.connector.api.annotation.OutboundConnector;
 import io.camunda.connector.api.outbound.OutboundConnectorContext;
 import io.camunda.connector.api.outbound.OutboundConnectorFunction;
+import io.camunda.connector.comprehend.caller.SyncComprehendCaller;
 import io.camunda.connector.comprehend.model.ComprehendRequest;
+import io.camunda.connector.comprehend.model.ComprehendRequestData;
+import io.camunda.connector.comprehend.supplier.ComprehendClientSupplier;
 import io.camunda.connector.generator.java.annotation.ElementTemplate;
 
 @OutboundConnector(
@@ -32,8 +36,32 @@ import io.camunda.connector.generator.java.annotation.ElementTemplate;
     icon = "icon.svg")
 public class ComprehendConnectorFunction implements OutboundConnectorFunction {
 
+  private ComprehendClientSupplier clientSupplier;
+
+  private SyncComprehendCaller syncComprehendCaller;
+
+  public ComprehendConnectorFunction(
+      ComprehendClientSupplier clientSupplier, SyncComprehendCaller syncComprehendCaller) {
+    this.clientSupplier = clientSupplier;
+    this.syncComprehendCaller = syncComprehendCaller;
+  }
+
   @Override
   public Object execute(OutboundConnectorContext context) throws Exception {
-    return null;
+    var request = context.bindVariables(ComprehendRequest.class);
+
+    return switch (request.getInput().executionType()) {
+      case SYNC ->
+          syncComprehendCaller.call(clientSupplier.getSyncClient(request), request.getInput());
+      case ASYNC -> null;
+        //              asyncTextractCaller.call(
+        //                      request.getInput(), clientSupplier.getAsyncTextractClient(request));
+    };
+  }
+
+  private DocumentReaderConfig prepareDocumentReaderConfig(ComprehendRequestData requestData) {
+    return new DocumentReaderConfig()
+        .withDocumentReadAction(requestData.documentReadAction().name())
+        .withDocumentReadMode(requestData.documentReadMode().name());
   }
 }
