@@ -50,13 +50,16 @@ public class ComprehendConnectorFunction implements OutboundConnectorFunction {
   public Object execute(OutboundConnectorContext context) throws Exception {
     var request = context.bindVariables(ComprehendRequest.class);
 
-    return switch (request.getInput().executionType()) {
-      case SYNC ->
-          syncComprehendCaller.call(clientSupplier.getSyncClient(request), request.getInput());
-      case ASYNC -> null;
-        //              asyncTextractCaller.call(
-        //                      request.getInput(), clientSupplier.getAsyncTextractClient(request));
-    };
+    //    return switch (request.getInput().executionType()) {
+    //      case SYNC ->
+    //          syncComprehendCaller.call(clientSupplier.getSyncClient(request),
+    // request.getInput());
+    //      case ASYNC -> null;
+    //        //              asyncTextractCaller.call(
+    //        //                      request.getInput(),
+    // clientSupplier.getAsyncTextractClient(request));
+    //    };
+    return null;
   }
 
   private DocumentReaderConfig prepareDocumentReaderConfig(ComprehendRequestData requestData) {
