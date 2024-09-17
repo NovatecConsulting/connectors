@@ -11,8 +11,11 @@ import io.camunda.connector.api.annotation.OutboundConnector;
 import io.camunda.connector.api.outbound.OutboundConnectorContext;
 import io.camunda.connector.api.outbound.OutboundConnectorFunction;
 import io.camunda.connector.comprehend.caller.SyncComprehendCaller;
+import io.camunda.connector.comprehend.model.ASyncData;
 import io.camunda.connector.comprehend.model.ComprehendRequest;
 import io.camunda.connector.comprehend.model.ComprehendRequestData;
+import io.camunda.connector.comprehend.model.InputData;
+import io.camunda.connector.comprehend.model.SyncData;
 import io.camunda.connector.comprehend.supplier.ComprehendClientSupplier;
 import io.camunda.connector.generator.java.annotation.ElementTemplate;
 
@@ -50,15 +53,17 @@ public class ComprehendConnectorFunction implements OutboundConnectorFunction {
   public Object execute(OutboundConnectorContext context) throws Exception {
     var request = context.bindVariables(ComprehendRequest.class);
 
-    //    return switch (request.getInput().executionType()) {
-    //      case SYNC ->
-    //          syncComprehendCaller.call(clientSupplier.getSyncClient(request),
-    // request.getInput());
-    //      case ASYNC -> null;
-    //        //              asyncTextractCaller.call(
-    //        //                      request.getInput(),
-    // clientSupplier.getAsyncTextractClient(request));
-    //    };
+    InputData input = request.getInput();
+    if (input instanceof SyncData) {
+
+    var client = clientSupplier.getSyncClient(request);
+
+    return syncComprehendCaller.call(client , input);
+
+    } else {
+      throw new IllegalArgumentException();
+    }
+
     return null;
   }
 

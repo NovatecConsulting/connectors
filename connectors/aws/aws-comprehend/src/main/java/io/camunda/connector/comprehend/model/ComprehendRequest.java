@@ -13,4 +13,12 @@ import jakarta.validation.constraints.NotNull;
 public class ComprehendRequest extends AwsBaseRequest {
 
   @Valid @NotNull private InputData input;
+
+  public @Valid @NotNull InputData getInput() {
+    return input;
+  }
+
+  public void setInput(final @Valid @NotNull InputData input) {
+    this.input = input;
+  }
 }
