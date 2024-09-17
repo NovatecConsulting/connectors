@@ -11,7 +11,6 @@ import io.camunda.connector.api.annotation.OutboundConnector;
 import io.camunda.connector.api.outbound.OutboundConnectorContext;
 import io.camunda.connector.api.outbound.OutboundConnectorFunction;
 import io.camunda.connector.comprehend.caller.SyncComprehendCaller;
-import io.camunda.connector.comprehend.model.ASyncData;
 import io.camunda.connector.comprehend.model.ComprehendRequest;
 import io.camunda.connector.comprehend.model.ComprehendRequestData;
 import io.camunda.connector.comprehend.model.InputData;
@@ -56,9 +55,9 @@ public class ComprehendConnectorFunction implements OutboundConnectorFunction {
     InputData input = request.getInput();
     if (input instanceof SyncData) {
 
-    var client = clientSupplier.getSyncClient(request);
+      var client = clientSupplier.getSyncClient(request);
 
-    return syncComprehendCaller.call(client , input);
+      //    return syncComprehendCaller.call(client , input);
 
     } else {
       throw new IllegalArgumentException();

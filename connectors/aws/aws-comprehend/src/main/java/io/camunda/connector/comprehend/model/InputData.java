@@ -7,16 +7,8 @@
 package io.camunda.connector.comprehend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.camunda.connector.generator.java.annotation.TemplateDiscriminatorProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @TemplateDiscriminatorProperty(name = "type", group = "input", label = "Choose type")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
-@JsonSubTypes({
-  // channel
-  @JsonSubTypes.Type(value = SyncData.class, name = "sync"),
-  @JsonSubTypes.Type(value = ASyncData.class, name = "async")
-})
 public sealed interface InputData permits SyncData, ASyncData {}
