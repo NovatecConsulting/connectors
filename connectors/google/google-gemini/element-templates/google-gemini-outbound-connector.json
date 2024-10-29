@@ -1,0 +1,448 @@
+{
+  "$schema" : "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+  "name" : "GoogleGemini Outbound Connector",
+  "id" : "io.camunda.connectors.GoogleGemini.v1",
+  "description" : " A large language model (LLM) created by Google AI. It's a multimodal model, meaning it can understand and work with different types of information like text, code, audio, images, and video",
+  "version" : 1,
+  "category" : {
+    "id" : "connectors",
+    "name" : "Connectors"
+  },
+  "appliesTo" : [ "bpmn:Task" ],
+  "elementType" : {
+    "value" : "bpmn:ServiceTask"
+  },
+  "groups" : [ {
+    "id" : "authentication",
+    "label" : "Authentication"
+  }, {
+    "id" : "input",
+    "label" : "Configure input"
+  }, {
+    "id" : "output",
+    "label" : "Output mapping"
+  }, {
+    "id" : "error",
+    "label" : "Error handling"
+  }, {
+    "id" : "retries",
+    "label" : "Retries"
+  } ],
+  "properties" : [ {
+    "value" : "io.camunda:google-gemini:1",
+    "binding" : {
+      "property" : "type",
+      "type" : "zeebe:taskDefinition"
+    },
+    "type" : "Hidden"
+  }, {
+    "id" : "authentication.authType",
+    "label" : "Type",
+    "optional" : false,
+    "value" : "refresh",
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "group" : "authentication",
+    "binding" : {
+      "name" : "authentication.authType",
+      "type" : "zeebe:input"
+    },
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "Bearer token",
+      "value" : "bearer"
+    }, {
+      "name" : "Refresh token",
+      "value" : "refresh"
+    } ]
+  }, {
+    "id" : "authentication.bearerToken",
+    "label" : "Bearer token",
+    "description" : "Enter a valid Google API Bearer token",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "authentication",
+    "binding" : {
+      "name" : "authentication.bearerToken",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "authentication.authType",
+      "equals" : "bearer",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "authentication.oauthClientId",
+    "label" : "Client ID",
+    "description" : "Enter Google API Client ID",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "authentication",
+    "binding" : {
+      "name" : "authentication.oauthClientId",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "authentication.authType",
+      "equals" : "refresh",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "authentication.oauthClientSecret",
+    "label" : "Client secret",
+    "description" : "Enter Google API client Secret",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "authentication",
+    "binding" : {
+      "name" : "authentication.oauthClientSecret",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "authentication.authType",
+      "equals" : "refresh",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "authentication.oauthRefreshToken",
+    "label" : "Refresh token",
+    "description" : "Enter a valid Google API refresh token",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "authentication",
+    "binding" : {
+      "name" : "authentication.oauthRefreshToken",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "authentication.authType",
+      "equals" : "refresh",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.contentURL",
+    "label" : "Insert media",
+    "description" : "Media link.",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.contentURL",
+      "type" : "zeebe:input"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.fileType",
+    "label" : "File type",
+    "description" : "Select file type.",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.fileType",
+      "type" : "zeebe:input"
+    },
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "Text",
+      "value" : "TEXT"
+    }, {
+      "name" : "Video",
+      "value" : "VIDEO"
+    }, {
+      "name" : "Image",
+      "value" : "IMAGE"
+    }, {
+      "name" : "Document",
+      "value" : "DOCUMENT"
+    }, {
+      "name" : "Audio",
+      "value" : "AUDIO"
+    } ]
+  }, {
+    "id" : "input.contentText",
+    "label" : "Prompt",
+    "description" : "Insert prompt.",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "group" : "input",
+    "binding" : {
+      "name" : "input.contentText",
+      "type" : "zeebe:input"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.systemInstrText",
+    "label" : "System instructions",
+    "description" : "System instructions inform how the model should respond.",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.systemInstrText",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "System instructions inform how the model should respond. Use them to give the model context to understand the task, provide more custom responses and adhere to specific guidelines. Instructions apply each time you send a request to the model.<a href=\"https://cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/system-instructions?hl=en\" Learn more about system instructions </a>",
+    "type" : "String"
+  }, {
+    "id" : "input.grounding",
+    "label" : "Grounding",
+    "description" : "Source.",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.grounding",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "Grounding connects model output to verifiable sources of information. This is useful in situations where accuracy and reliability are important.<a href=\"https://cloud.google.com/vertex-ai/generative-ai/docs/grounding/overview?hl=en\" Learn more about grounding </a>",
+    "type" : "String"
+  }, {
+    "id" : "input.dataStorePath",
+    "label" : "datastore",
+    "description" : "Vertex AI datastore path",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.dataStorePath",
+      "type" : "zeebe:input"
+    },
+    "type" : "String"
+  }, {
+    "id" : "input.stopSequences",
+    "label" : "datastore",
+    "description" : "Vertex AI datastore path",
+    "optional" : true,
+    "feel" : "optional",
+    "group" : "input",
+    "binding" : {
+      "name" : "input.stopSequences",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "A stop sequence is a series of characters (including spaces) that stops response generation if the model encounters it. The sequence is not included as part of the response. You can add up to five stop sequences.",
+    "type" : "String"
+  }, {
+    "id" : "input.hateSpeach",
+    "label" : "Hate speech",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.hateSpeach",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "You can adjust the likelihood of receiving a model response that could contain harmful content. Content is blocked based on the probability that it's harmful.<a href=\"https://cloud.google.com/vertex-ai/docs/generative-ai/learn/responsible-ai?hl=en#safety_filters_and_attributes\" Learn more </a>",
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "OFF",
+      "value" : "OFF"
+    }, {
+      "name" : "Block few",
+      "value" : "BLOCK_ONLY_HIGH"
+    }, {
+      "name" : "Block some",
+      "value" : "BLOCK_MEDIUM_AND_ABOVE"
+    }, {
+      "name" : "Block most",
+      "value" : "BLOCK_LOW_AND_ABOVE"
+    } ]
+  }, {
+    "id" : "input.dangerousContent",
+    "label" : "Dangerous content",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.dangerousContent",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "You can adjust the likelihood of receiving a model response that could contain harmful content. Content is blocked based on the probability that it's harmful.<a href=\"https://cloud.google.com/vertex-ai/docs/generative-ai/learn/responsible-ai?hl=en#safety_filters_and_attributes\" Learn more </a>",
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "OFF",
+      "value" : "OFF"
+    }, {
+      "name" : "Block few",
+      "value" : "BLOCK_ONLY_HIGH"
+    }, {
+      "name" : "Block some",
+      "value" : "BLOCK_MEDIUM_AND_ABOVE"
+    }, {
+      "name" : "Block most",
+      "value" : "BLOCK_LOW_AND_ABOVE"
+    } ]
+  }, {
+    "id" : "input.sexuallyExplicit",
+    "label" : "Sexually explicit content",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.sexuallyExplicit",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "You can adjust the likelihood of receiving a model response that could contain harmful content. Content is blocked based on the probability that it's harmful.<a href=\"https://cloud.google.com/vertex-ai/docs/generative-ai/learn/responsible-ai?hl=en#safety_filters_and_attributes\" Learn more </a>",
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "OFF",
+      "value" : "OFF"
+    }, {
+      "name" : "Block few",
+      "value" : "BLOCK_ONLY_HIGH"
+    }, {
+      "name" : "Block some",
+      "value" : "BLOCK_MEDIUM_AND_ABOVE"
+    }, {
+      "name" : "Block most",
+      "value" : "BLOCK_LOW_AND_ABOVE"
+    } ]
+  }, {
+    "id" : "input.harassment",
+    "label" : "Harassment content",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.harassment",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "You can adjust the likelihood of receiving a model response that could contain harmful content. Content is blocked based on the probability that it's harmful.<a href=\"https://cloud.google.com/vertex-ai/docs/generative-ai/learn/responsible-ai?hl=en#safety_filters_and_attributes\" Learn more </a>",
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "OFF",
+      "value" : "OFF"
+    }, {
+      "name" : "Block few",
+      "value" : "BLOCK_ONLY_HIGH"
+    }, {
+      "name" : "Block some",
+      "value" : "BLOCK_MEDIUM_AND_ABOVE"
+    }, {
+      "name" : "Block most",
+      "value" : "BLOCK_LOW_AND_ABOVE"
+    } ]
+  }, {
+    "id" : "input.temperature",
+    "label" : "Temperature",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.temperature",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "Temperature controls the randomness in token selection.\nA lower temperature is good when you expect a true or correct response. \nA temperature of 0 means the highest probability token is usually selected.\nA higher temperature can lead to diverse or unexpected results. Some models have a higher temperature max to encourage more random responses.",
+    "type" : "String"
+  }, {
+    "id" : "input.maxOutputTokens",
+    "label" : "Output token limit",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.maxOutputTokens",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "Output token limit determines the maximum amount of text output from one prompt. A token is approximately four characters.",
+    "type" : "String"
+  }, {
+    "id" : "input.seed",
+    "label" : "Seed",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.seed",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "Setting a seed value is useful when you make repeated requests and want the same model response.\nDeterministic outcome isn’t guaranteed. Changing the model or other settings can cause variations in the response even when you use the same seed value.",
+    "type" : "String"
+  }, {
+    "id" : "input.topK",
+    "label" : "Top-K ",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.topK",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "Top-K specifies the number of candidate tokens when the model is selecting an output token. Use a lower value for less random responses and a higher value for more random responses.",
+    "type" : "String"
+  }, {
+    "id" : "input.topP",
+    "label" : "Top-P ",
+    "description" : "Vertex AI datastore path",
+    "optional" : true,
+    "group" : "input",
+    "binding" : {
+      "name" : "input.topP",
+      "type" : "zeebe:input"
+    },
+    "tooltip" : "Top-p changes how the model selects tokens for output. Tokens are selected from most probable to least until the sum of their probabilities equals the top-p value. For example, if tokens A, B, and C have a probability of .3, .2, and .1 and the top-p value is .5, then the model will select either A or B as the next token (using temperature). For the least variable results, set top-P to 0.",
+    "type" : "String"
+  }, {
+    "id" : "resultVariable",
+    "label" : "Result variable",
+    "description" : "Name of variable to store the response in",
+    "group" : "output",
+    "binding" : {
+      "key" : "resultVariable",
+      "type" : "zeebe:taskHeader"
+    },
+    "type" : "String"
+  }, {
+    "id" : "resultExpression",
+    "label" : "Result expression",
+    "description" : "Expression to map the response into process variables",
+    "feel" : "required",
+    "group" : "output",
+    "binding" : {
+      "key" : "resultExpression",
+      "type" : "zeebe:taskHeader"
+    },
+    "type" : "Text"
+  }, {
+    "id" : "errorExpression",
+    "label" : "Error expression",
+    "description" : "Expression to handle errors. Details in the <a href=\"https://docs.camunda.io/docs/components/connectors/use-connectors/\" target=\"_blank\">documentation</a>.",
+    "feel" : "required",
+    "group" : "error",
+    "binding" : {
+      "key" : "errorExpression",
+      "type" : "zeebe:taskHeader"
+    },
+    "type" : "Text"
+  }, {
+    "id" : "retryCount",
+    "label" : "Retries",
+    "description" : "Number of retries",
+    "value" : "3",
+    "feel" : "optional",
+    "group" : "retries",
+    "binding" : {
+      "property" : "retries",
+      "type" : "zeebe:taskDefinition"
+    },
+    "type" : "String"
+  }, {
+    "id" : "retryBackoff",
+    "label" : "Retry backoff",
+    "description" : "ISO-8601 duration to wait between retries",
+    "value" : "PT0S",
+    "feel" : "optional",
+    "group" : "retries",
+    "binding" : {
+      "key" : "retryBackoff",
+      "type" : "zeebe:taskHeader"
+    },
+    "type" : "String"
+  } ]
+}
