@@ -75,11 +75,10 @@ public record SmtpSendEmail(
             defaultValue = "plain",
             type = TemplateProperty.PropertyType.String,
             tooltip = "Email's contentType",
-            binding = @TemplateProperty.PropertyBinding(name = "data.smtpAction.contentType")
-    )
-    @Valid
-    @NotNull
-    String contentType,
+            binding = @TemplateProperty.PropertyBinding(name = "data.smtpAction.contentType"))
+        @Valid
+        @NotNull
+        String contentType,
     @TemplateProperty(
             label = "Email Content",
             group = "sendEmailSmtp",
@@ -91,5 +90,4 @@ public record SmtpSendEmail(
         @Valid
         @NotNull
         String body)
-
     implements SmtpAction {}
