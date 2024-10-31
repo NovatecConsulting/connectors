@@ -255,7 +255,8 @@ public class JakartaEmailActionExecutor implements EmailActionExecutor {
       if (cc.isPresent()) message.setRecipients(Message.RecipientType.CC, cc.get());
       if (bcc.isPresent()) message.setRecipients(Message.RecipientType.BCC, bcc.get());
       message.setSubject(smtpSendEmail.subject());
-      if (smtpSendEmail.contentType().equals("html")) {
+      if (smtpSendEmail.contentType() != null
+          && smtpSendEmail.contentType().equals(ContentType.HTML)) {
         message.setContent(smtpSendEmail.body(), "text/html; charset=utf-8");
       } else {
         message.setText(smtpSendEmail.body());
