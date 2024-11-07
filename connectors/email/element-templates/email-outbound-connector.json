@@ -593,6 +593,9 @@
     }, {
       "name" : "Html",
       "value" : "html"
+    }, {
+      "name" : "Html+Plain",
+      "value" : "multipart"
     } ]
   }, {
     "id" : "smtpBody",
